@@ -10,7 +10,19 @@ export const clientSchema = {
             description: "Client unique name",
             type: "string"
         },
-        pass: {
+        dni: {
+            description: "Client secret",
+            type: "string"
+        },
+        phone: {
+            description: "Client secret",
+            type: "string"
+        },
+        address: {
+            description: "Client secret",
+            type: "string"
+        },
+        cp: {
             description: "Client secret",
             type: "string"
         },

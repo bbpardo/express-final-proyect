@@ -1,6 +1,6 @@
 import { validate } from "jsonschema";
 
-import {clientSchema } from "../schemas/usersSchemas.mjs";
+import {clientSchema } from "../schemas/clientsSchemas.mjs";
 
 export function validateClientJSON ( request, response, next) {
     try {

@@ -1,33 +1,88 @@
 import { Client, clients } from "../models/Clients.mjs";
+import { findClient, deleteClient, updateClient , insertClient, sqlCallback, getClients} from "../db.mjs";
 
 export function getClientsController(request,response){
-    response.json(clients)
+    try {
+        getClients((error, data)=>{
+            if ( error ) {
+                console.error(error);
+                response.status(500)
+                response.send("Database error.")
+                return
+            }
+            if ( data ){
+                const json = JSON.stringify(data)
+                response.send(json);
+                return
+            }
+        });
+    } catch (err) {
+        response.status(500)
+        response.send(err)
+        return
+    }
 }
 
 export function postClientController(request, response) {
     try {
-        clients.push(new Client(request.body));
-        response.sendStatus(201);
+        const { id, name, dni, phone, address, cp } = request.body;
+        if ( ! name || ! dni || ! address || ! cp ) {
+            response.status(400)
+            response.send("Must provide 'userName' and 'password' JSON");
+            return
+        }
+        findClient(dni, (error, data)=>{
+            if (error) {
+                console.error(error)
+                throw error;
+            }
+            if ( data ) {
+                response.status(401);
+                response.send("Usuario ya registrado");
+                return
+            } else {
+                const newClient = new Client({name, dni, phone, address, cp});
+                insertClient(newClient,sqlCallback);
+                response.send("Usuario creado correctamente")
+                return
+            }
+        });
     } catch (err) {
-        console.error(err);
-        response.sendStatus(500);
+        response.status(500)
+        response.send(err)
+        return
     }
 }
 
 export function deleteClientController (request, response) {
-    const updatedTask = request.body;
-    const oldTaskIdx = clients.findIndex(
-        item => item.id === updatedTask.id
-    )
-    clients.splice(oldTaskIdx,1);
-    response.sendStatus(200)
+    const { dni }= request.body
+    findClient(dni, (error, data)=>{
+        if (error) {
+            console.error(error)
+            throw error;
+        }
+        if(data) {
+            deleteClient(data.id)
+            response.send("Usuario borrado correctamente")
+        }else{
+            response.send("Cliente no encontrado")
+        }
+    });
 }
 
 export function putClientController (request, response) {
-    const updatedTask = request.body;
-    const oldTaskIdx = clients.findIndex(
-        item => item.id === updatedTask.id
-    )
-    clients[oldTaskIdx] = updatedTask;
-    response.sendStatus(200);
+    const { name, dni, phone, address, cp } = request.body;
+    findClient(dni, (error, data)=>{
+        if (error) {
+            console.error(error)
+            throw error;
+        }
+        if(data) {
+            const updateClients = {name, dni, phone, address, cp};
+            updateClient(data.id, updateClients);
+            response.send("Usuario modificado")
+        }else{
+            response.send("Cliente no encontrado")
+        }
+    });
 }

@@ -15,10 +15,10 @@ try{
     const jsonParser = express.json();
     app.use(requestLog);
 //clients
-    app.get(PATH_PREFIX+"/Clients/",getClientsController);
-    app.post(PATH_PREFIX+"/Clients/",jsonParser, validateClientJSON , postClientController);
-    app.delete(PATH_PREFIX+"/Clients/",jsonParser,validateClientJSON, deleteClientController);
-    app.put(PATH_PREFIX+"/Clients/", jsonParser,validateClientJSON, putClientController);
+    app.get(PATH_PREFIX+"/clients/",getClientsController);
+    app.post(PATH_PREFIX+"/clients/",jsonParser, validateClientJSON , postClientController);
+    app.delete(PATH_PREFIX+"/clients/",jsonParser,validateClientJSON, deleteClientController);
+    app.put(PATH_PREFIX+"/clients/", jsonParser,validateClientJSON, putClientController);
 //Articles
     app.get(PATH_PREFIX+"/articles/",getArticlesController)
     app.post(PATH_PREFIX+"/articles/",jsonParser,validateArticleJSON, postArticleController);
