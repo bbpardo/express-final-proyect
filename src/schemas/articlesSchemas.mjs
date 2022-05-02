@@ -10,8 +10,16 @@ export const ArticlesSchema = {
             description: "Description of the article",
             type: "string"
         },
+        stock: {
+            description: "Stock of the article",
+            type: "number"
+        },
+        photo: {
+            description: "Link photo of the article",
+            type: "string"
+        },
         price: {
-            description: "Prices of the article",
+            description: "Price of the article",
             type: "number"
         },
     },

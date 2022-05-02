@@ -1,32 +1,88 @@
-import { articles, Article } from "../models/Articles.mjs";
+import { findArticle, getArticles, insertArticle, sqlCallback } from "../db.mjs";
+import { Article } from "../models/Articles.mjs";
+
 export function getArticlesController(request,response){
-    response.json(articles)
+    try {
+        getArticles((error, data)=>{
+            if ( error ) {
+                console.error(error);
+                response.status(500)
+                response.send("Database error.")
+                return
+            }
+            if ( data ){
+                const json = JSON.stringify(data)
+                response.send(json);
+                return
+            }
+        });
+    } catch (err) {
+        response.status(500)
+        response.send(err)
+        return
+    }
 }
 
 export function postArticleController(request, response) {
     try {
-        articles.push(new Article(request.body));
-        response.sendStatus(201);
+        const { id, name, description, photo, stock, price  } = request.body;
+        if ( ! name ) {
+            response.status(400)
+            response.send("Must provide 'userName' and 'password' JSON");
+            return
+        }
+        findArticle(id, (error, data)=>{
+            if (error) {
+                console.error(error)
+                throw error;
+            }
+            if ( data ) {
+                response.status(401);
+                response.send("El articulo ya existe");
+                return
+            } else {
+                const newArticle = new Article({name, description, photo, stock, price });
+                insertArticle(newArticle,sqlCallback);
+                response.send("Articulo registrado correctamente")
+                return
+            }
+        });
     } catch (err) {
-        console.error(err);
-        response.sendStatus(500);
+        response.status(500)
+        response.send(err)
+        return
     }
 }
 
 export function deleteArticleController (request, response) {
-    const updatedTask = request.body;
-    const oldTaskIdx = articles.findIndex(
-        item => item.id === updatedTask.id
-    )
-    articles.splice(oldTaskIdx,1);
-    response.sendStatus(200)
+    const { name }= request.body
+    findArticle(id, (error, data)=>{
+        if (error) {
+            console.error(error)
+            throw error;
+        }
+        if(data) {
+            deleteArticle(data.id)
+            response.send("Articulo borrado correctamente")
+        }else{
+            response.send("Articulo no encontrado")
+        }
+    });
 }
 
 export function putArticleController (request, response) {
-    const updatedTask = request.body;
-    const oldTaskIdx = articles.findIndex(
-        item => item.id === updatedTask.id
-    )
-    articles[oldTaskIdx] = updatedTask;
-    response.sendStatus(200);
+    const {name, description, photo, stock, price } = request.body;
+    findClient(id, (error, data)=>{
+        if (error) {
+            console.error(error)
+            throw error;
+        }
+        if(data) {
+            const updateClients = {name, description, photo, stock, price};
+            updateClient(data.id, updateClients);
+            response.send("Datos del articulo modificado")
+        }else{
+            response.send("Articulo no encontrado")
+        }
+    });
 }

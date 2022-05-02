@@ -1,4 +1,4 @@
-import { Client, clients } from "../models/Clients.mjs";
+import { Client } from "../models/Clients.mjs";
 import { findClient, deleteClient, updateClient , insertClient, sqlCallback, getClients} from "../db.mjs";
 
 export function getClientsController(request,response){

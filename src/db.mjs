@@ -65,8 +65,8 @@ export function deleteClient (id){
     db.run(`DELETE FROM clients 
     WHERE id = "${id}"`
     )
-
 }
+
 export function updateClient(id, clientObject){
     const {name, dni, phone, address, cp } = clientObject;
     db.run(`UPDATE clients
@@ -79,6 +79,45 @@ export function updateClient(id, clientObject){
         )
 }
 
+export function findArticle (id, callback ) {
+    db.get(`
+        SELECT id
+        FROM articles
+        WHERE id = "${id}"
+        `,
+        callback
+    )
+}
 
+export function insertArticle ( clientObject, callback ) {
+    const { id, name, description, stock, photo, price } = clientObject;
+    const sql = `
+        INSERT INTO articles (id, name, description, stock, photo, price)
+        values (${id}, "${name}", "${description}", "${stock}", "${photo}", "${price}");
+    `; 
+    db.run(sql,callback);
+}
+
+export function getArticles ( callback ) {
+    db.all("SELECT id, name, description, stock, photo, price FROM articles", callback);
+}
+
+export function deleteArticle (id){
+    db.run(`DELETE FROM articles 
+    WHERE id = "${id}"`
+    )
+}
+
+export function updateArticle(id, articleObject){
+    const {name, description, photo, stock, price } = articleObject;
+    db.run(`UPDATE articles
+        SET name = '${name}',
+            description = '${description}',
+            photo= '${photo}',
+            stock = '${stock}',
+            price = '${price}'
+        WHERE id = ${id};`
+        )
+}
 
 export default db;

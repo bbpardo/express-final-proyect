@@ -1,4 +1,3 @@
-export const clients = []
 export class Client{
     constructor({name, dni, phone, address, cp}){
         this.id = Date.now(),

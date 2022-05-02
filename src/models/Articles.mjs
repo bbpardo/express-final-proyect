@@ -1,9 +1,10 @@
-export const articles = []
 export class Article{
-    constructor({description, name, price}){
+    constructor({name, description, photo, stock, price }){
         this.id = Date.now(),
         this.name= name,
         this.description = description,
+        this.stock = stock,
+        this.photo = photo,
         this.price = price
     }
 }
