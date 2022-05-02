@@ -1,6 +1,5 @@
 import express from "express";
 
-import { requestLog } from "./middleware/requestLog.mjs";
 import { getClientsController, postClientController, deleteClientController, putClientController } from "./controllers/clientsControllers.mjs";
 import { postArticleController, getArticlesController,putArticleController,deleteArticleController } from "./controllers/articlesControllers.mjs";
 import { validateClientJSON } from "./middleware/clientValidator.mjs";
@@ -13,7 +12,6 @@ const port = 3000;
 
 try{
     const jsonParser = express.json();
-    app.use(requestLog);
 //clients
     app.get(PATH_PREFIX+"/clients/",getClientsController);
     app.post(PATH_PREFIX+"/clients/",jsonParser, validateClientJSON , postClientController);

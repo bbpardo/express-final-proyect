@@ -1,9 +1,11 @@
-import { findArticle, getArticles, insertArticle, sqlCallback } from "../db.mjs";
+import { findArticle, insertArticle, sqlCallback } from "../db.mjs";
 import { Article } from "../models/Articles.mjs";
+import { findIt, getIt, insertIt } from "./dbcontrollers.mjs";
 
 export function getArticlesController(request,response){
     try {
-        getArticles((error, data)=>{
+        const keys = "id, name, description, stock, photo, price"
+        getIt(keys, "articles", (error, data)=>{
             if ( error ) {
                 console.error(error);
                 response.status(500)
@@ -18,6 +20,7 @@ export function getArticlesController(request,response){
         });
     } catch (err) {
         response.status(500)
+        console.log(err)
         response.send(err)
         return
     }
@@ -31,7 +34,7 @@ export function postArticleController(request, response) {
             response.send("Must provide 'userName' and 'password' JSON");
             return
         }
-        findArticle(id, (error, data)=>{
+        findIt("articles","id",id,(error, data)=>{
             if (error) {
                 console.error(error)
                 throw error;
@@ -42,7 +45,7 @@ export function postArticleController(request, response) {
                 return
             } else {
                 const newArticle = new Article({name, description, photo, stock, price });
-                insertArticle(newArticle,sqlCallback);
+                insertIt(newArticle,"articles",sqlCallback);
                 response.send("Articulo registrado correctamente")
                 return
             }
