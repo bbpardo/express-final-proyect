@@ -14,22 +14,42 @@ export function insertIt ( object, table, callback ) {
     const newLabels = Object.keys(object);
     const newValues = Object.values(object);
     const labels = newLabels.join(", ") ;
-    let values = "";
-    newValues.forEach(item=>values += JSON.stringify(item));
-    
+    let prop = "?";
+    for (let idx= 1; idx < newValues.length; idx++){
+        prop = prop +",?"
+    }
     const sql = `
         INSERT INTO ${table} (${labels})
-        VALUES ("${values}");
+        VALUES (${prop});
     `;
-    db.run(sql,callback);
+    db.run(sql,newValues,callback);
 }
 
 export function getIt (keys, table, callback ) {
     db.all(`SELECT ${keys} FROM ${table}`, callback);
 }   
 
-export function deleteClient (value, value2 , table){
+export function deleteIt (table, value, value2 ){
     db.run(`DELETE FROM ${table} 
     WHERE ${value} = "${value2}"`
     )
+}
+
+export function updateIt(table, id, item){
+    const newLabels = Object.keys(item);
+    const newValues = Object.values(item);
+    const updatedate = [];
+    for (let idx= 0; idx < newLabels.length; idx++){
+        updatedate[idx] = newLabels[idx]+" = "+ "'"+ newValues[idx] +"'"
+    }
+    const prop = updatedate.join(",")
+    db.run(`UPDATE ${table}
+        SET ${prop}
+        WHERE id = ${id};`
+        )
+}
+
+export function sqlCallback (error, data) {
+    console.log("error:", error, "data:", data);
+    if ( error ) throw error;
 }

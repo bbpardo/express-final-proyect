@@ -1,9 +1,10 @@
 import { Client } from "../models/Clients.mjs";
-import { findClient, deleteClient, updateClient , insertClient, sqlCallback, getClients} from "../db.mjs";
+import {  deleteIt, findIt, getIt, insertIt, updateIt, sqlCallback  } from "./dbcontrollers.mjs";
 
 export function getClientsController(request,response){
     try {
-        getClients((error, data)=>{
+        const keys = "id, name, dni, phone, address, cp"
+        getIt(keys, "clients", (error, data)=>{
             if ( error ) {
                 console.error(error);
                 response.status(500)
@@ -18,6 +19,7 @@ export function getClientsController(request,response){
         });
     } catch (err) {
         response.status(500)
+        console.log(err)
         response.send(err)
         return
     }
@@ -25,25 +27,25 @@ export function getClientsController(request,response){
 
 export function postClientController(request, response) {
     try {
-        const { id, name, dni, phone, address, cp } = request.body;
+        const {name, dni, phone, address, cp } = request.body;
         if ( ! name || ! dni || ! address || ! cp ) {
             response.status(400)
             response.send("Must provide 'userName' and 'password' JSON");
             return
         }
-        findClient(dni, (error, data)=>{
+        findIt("clients","dni",dni,(error, data)=>{
             if (error) {
                 console.error(error)
                 throw error;
             }
             if ( data ) {
                 response.status(401);
-                response.send("Usuario ya registrado");
+                response.send("El cliente ya existe");
                 return
             } else {
-                const newClient = new Client({name, dni, phone, address, cp});
-                insertClient(newClient,sqlCallback);
-                response.send("Usuario creado correctamente")
+                const newclient = new Client({name, dni, phone, address, cp });
+                insertIt(newclient,"clients",sqlCallback);
+                response.send("cliente registrado correctamente")
                 return
             }
         });
@@ -56,14 +58,14 @@ export function postClientController(request, response) {
 
 export function deleteClientController (request, response) {
     const { dni }= request.body
-    findClient(dni, (error, data)=>{
+    findIt("clients","dni",dni,(error, data)=>{
         if (error) {
             console.error(error)
             throw error;
         }
         if(data) {
-            deleteClient(data.id)
-            response.send("Usuario borrado correctamente")
+            deleteIt(data.id)
+            response.send("Cliente eliminado correctamente")
         }else{
             response.send("Cliente no encontrado")
         }
@@ -71,16 +73,15 @@ export function deleteClientController (request, response) {
 }
 
 export function putClientController (request, response) {
-    const { name, dni, phone, address, cp } = request.body;
-    findClient(dni, (error, data)=>{
+    const {dni } = request.body;
+    findIt("clients","dni",dni,(error, data)=>{
         if (error) {
             console.error(error)
             throw error;
         }
         if(data) {
-            const updateClients = {name, dni, phone, address, cp};
-            updateClient(data.id, updateClients);
-            response.send("Usuario modificado")
+            updateIt("clients", data.id, request.body);
+            response.send("Datos del cliente modificado")
         }else{
             response.send("Cliente no encontrado")
         }

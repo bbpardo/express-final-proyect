@@ -1,6 +1,5 @@
-import { findArticle, insertArticle, sqlCallback } from "../db.mjs";
 import { Article } from "../models/Articles.mjs";
-import { findIt, getIt, insertIt } from "./dbcontrollers.mjs";
+import { deleteIt, findIt, getIt, insertIt, updateIt, sqlCallback } from "./dbcontrollers.mjs";
 
 export function getArticlesController(request,response){
     try {
@@ -58,14 +57,14 @@ export function postArticleController(request, response) {
 }
 
 export function deleteArticleController (request, response) {
-    const { name }= request.body
-    findArticle(id, (error, data)=>{
+    const { id }= request.body
+    findIt("articles","id",id,(error, data)=>{
         if (error) {
             console.error(error)
             throw error;
         }
         if(data) {
-            deleteArticle(data.id)
+            deleteIt(data.id)
             response.send("Articulo borrado correctamente")
         }else{
             response.send("Articulo no encontrado")
@@ -74,15 +73,15 @@ export function deleteArticleController (request, response) {
 }
 
 export function putArticleController (request, response) {
-    const {name, description, photo, stock, price } = request.body;
-    findClient(id, (error, data)=>{
+    const {id, name, description, photo, stock, price } = request.body;
+    findIt("articles","id",id,(error, data)=>{
         if (error) {
             console.error(error)
             throw error;
         }
         if(data) {
             const updateClients = {name, description, photo, stock, price};
-            updateClient(data.id, updateClients);
+            updateIt("articles",id, request.body);
             response.send("Datos del articulo modificado")
         }else{
             response.send("Articulo no encontrado")
