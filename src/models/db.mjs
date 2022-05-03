@@ -1,6 +1,6 @@
 import sqlite3 from 'sqlite3';
 
-export const db = new sqlite3.Database('./chat.db', (err) => {
+export const db = new sqlite3.Database('./luawave.db', (err) => {
     if (err) {
         console.error(err.message);
     }
