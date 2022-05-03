@@ -1,4 +1,4 @@
-import { db } from "../models/db.mjs";
+import { db } from "../models/luawaveDB.mjs";
 
 export function findIt (table, value, value2, callback ) {
     db.get(`
