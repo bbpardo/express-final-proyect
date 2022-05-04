@@ -40,13 +40,13 @@ export function updateIt(table, id, item){
     const newValues = Object.values(item);
     const updatedate = [];
     for (let idx= 0; idx < newLabels.length; idx++){
-        updatedate[idx] = newLabels[idx]+" = "+ "'"+ newValues[idx] +"'"
+        updatedate[idx] = newLabels[idx]+" = "+ "?"
     }
     const prop = updatedate.join(",")
-    db.run(`UPDATE ${table}
+    const sql = `UPDATE ${table}
         SET ${prop}
-        WHERE id = ${id};`
-        )
+        WHERE id = ${id};`;
+    db.run(sql,newValues)
 }
 
 export function sqlCallback (error, data) {
