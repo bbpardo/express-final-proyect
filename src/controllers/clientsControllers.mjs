@@ -1,5 +1,5 @@
 import { Client } from "../models/Clients.mjs";
-import {  deleteIt, findIt, getIt, insertIt, updateIt, sqlCallback  } from "./dbcontrollers.mjs";
+import {  deleteIt, findIt, getIt, insertIt, sqlCallback, updateClient  } from "./dbcontrollers.mjs";
 
 export function getClientsController(request,response){
     try {
@@ -64,7 +64,7 @@ export function deleteClientController (request, response) {
             throw error;
         }
         if(data) {
-            deleteIt(data.id)
+            deleteIt("clients", "id", data.id)
             response.send("Cliente eliminado correctamente")
         }else{
             response.send("Cliente no encontrado")
@@ -80,7 +80,7 @@ export function putClientController (request, response) {
             throw error;
         }
         if(data) {
-            updateIt("clients", data.id, request.body);
+            updateClient(data.id, request.body);
             response.send("Datos del cliente modificado")
         }else{
             response.send("Cliente no encontrado")

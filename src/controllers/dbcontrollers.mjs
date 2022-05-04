@@ -49,6 +49,22 @@ export function updateIt(table, id, item){
     db.run(sql,newValues)
 }
 
+export const updateClient = updateFactory("clients", db, ["name", "dni", "phone", "address", "cp"])
+function updateFactory(table, db ,item){
+    const updatedate = [];
+    for (let idx= 0; idx < item.length; idx++){
+        updatedate[idx] = item[idx]+" = "+ "?"
+    }
+    const prop = updatedate.join(",")
+    return function (id, item){
+        const newValues = Object.values(item)
+        const sql = `UPDATE ${table}
+        SET ${prop}
+        WHERE id = ${id};`;
+        db.run(sql,newValues)
+    }
+}
+
 export function sqlCallback (error, data) {
     console.log("error:", error, "data:", data);
     if ( error ) throw error;
