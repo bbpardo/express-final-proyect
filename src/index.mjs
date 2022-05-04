@@ -20,7 +20,7 @@ try{
 //Articles
     app.get(PATH_PREFIX+"/articles/",getArticlesController)
     app.post(PATH_PREFIX+"/articles/",jsonParser,validateArticleJSON, postArticleController);
-    app.delete(PATH_PREFIX+"/articles/",jsonParser,validateArticleJSON, deleteArticleController);
+    app.delete(PATH_PREFIX+"/articles/",jsonParser, deleteArticleController);
     app.put(PATH_PREFIX+"/articles/", jsonParser, putArticleController);
 //Port
     app.listen(port,()=>{

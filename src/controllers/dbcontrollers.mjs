@@ -9,6 +9,15 @@ export function findIt (table, value, value2, callback ) {
         callback
     )
 }
+export function findOne (select,table, comparator, value, callback ) {
+    db.get(`
+        SELECT ${select}
+        FROM ${table}
+        WHERE ${comparator} = "${value}"
+        `,
+        callback
+    )
+}
 
 export function insertIt ( object, table, callback ) {
     const newLabels = Object.keys(object);

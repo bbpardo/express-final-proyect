@@ -64,7 +64,7 @@ export function deleteArticleController (request, response) {
             throw error;
         }
         if(data) {
-            deleteIt(data.id)
+            deleteIt("articles","id", data.id)
             response.send("Articulo borrado correctamente")
         }else{
             response.send("Articulo no encontrado")
