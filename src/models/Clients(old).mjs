@@ -6,5 +6,5 @@ export class Client{
         this.phone = phone,
         this.address = address,
         this.cp = cp
-    }
+    };
 }
