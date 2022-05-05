@@ -15,7 +15,7 @@ db.run(`
             name TEXT NOT NULL,
             dni TEXT NOT NULL,
             phone TEXT NOT NULL,
-            address TEXT NOT NULL,
+            address VARCHAR(255) NOT NULL,
             cp TEXT NOT NULL
         )
 `);
@@ -26,7 +26,7 @@ db.run(`
         articles (
             id INTEGER PRIMARY KEY,
             name TEXT NOT NULL,
-            description TEXT NOT NULL,
+            description VARCHAR(255) NOT NULL,
             stock VALUE NOT NULL,
             photo TEXT NOT NULL,
             price VALUE NOT NULL
